@@ -1,0 +1,44 @@
+service: lambda-rds-proto
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: python3.9
+  lambdaHashingVersion: 20201221
+  region: ${opt:region, 'us-west-1'}
+  stage: ${opt:stage, 'dev'}
+  endpointType: REGIONAL
+  stackTags:
+    project: proto
+    environment: ${self:provider.stage}
+    team: backend
+    job_function: backendDev
+  vpc:
+    securityGroupIds:
+      - sg-04b42f78a22817aee
+    subnetIds:
+      - subnet-03ee1c5b6cac3ecf5
+      - subnet-094cea767c5f2d93e
+      - subnet-069362ff57855cfc5
+  environment:
+    STAGE: ${self:provider.stage}
+  logRetentionInDays: 30
+
+plugins:
+  - serverless-python-requirements
+  # - serverless-iam-roles-per-function
+
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
+
+custom:
+  secrets: ${file(./secrets.yml):${self:provider.stage}}
+  pythonRequirements:
+    dockerizePip: non-linux # Enable docker usage for compilation (Only on non-linux environments)
+
+##################################### Lambda Functions ############################################
+functions:
+  FetchWorkflow: ${file(src/fetch-workflow/FetchWorkflow.yml):${self:provider.stage}}
+  ###################################################################################################

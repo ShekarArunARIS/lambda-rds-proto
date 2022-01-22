@@ -1,0 +1,56 @@
+FetchWorkflow: &default
+  handler: src/fetch-workflow/FetchWorkflow.handler
+  memorySize: 512
+  timeout: 600
+
+  environment:
+    DB_USER: ${self:custom.secrets.DB_USER}
+    DB_PWD: ${self:custom.secrets.DB_PWD}
+    DB_ENDPOINT: ${self:custom.secrets.DB_ENDPOINT}
+    DB_INSTANCE_NAME: ${self:custom.secrets.DB_INSTANCE_NAME}
+
+###################################################################################################
+
+############################################ dev ##################################################
+dev:
+  <<: *default
+#   iamRoleStatements:
+#     - Effect: Allow
+#       Action:
+#         - s3:GetObject
+#         - s3:PutObject
+#       Resource:
+#         - arn:aws:s3:::bescom-app-media-dev/*
+
+# ###################################################################################################
+
+# ############################################ stg ################################################
+# stg:
+#   <<: *default
+#   iamRoleStatements:
+#     - Effect: Allow
+#       Action:
+#         - s3:GetObject
+#         - s3:PutObject
+#       Resource:
+#         - arn:aws:s3:::bescom-app-media-stg/*
+# ###################################################################################################
+
+# ########################################## staging ################################################
+# prd: &prd
+#   <<: *default
+#   iamRoleStatements:
+#     - Effect: Allow
+#       Action:
+#         - s3:GetObject
+#         - s3:PutObject
+#       Resource:
+#         - arn:aws:s3:::bescom-app-media-prd/*
+#   # vpc:
+#   #   securityGroupIds:
+#   #     - sg-4c6ccf34
+#   #   subnetIds:
+#   #     - subnet-85de4efe
+#   #     - subnet-86f8e1ee
+#   #     - subnet-cb5f1187
+# ###################################################################################################
