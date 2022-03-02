@@ -41,7 +41,7 @@ def handler(event, context):
     for row in result:
         print(row)
 
-    print("Attempting to fetch data")
+    print("Attempting to fetch data from DB")
     result = engine.execute("SELECT * FROM t_workflow")
     print("Statement executed. Result:")
     for row in result:
